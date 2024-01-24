@@ -169,7 +169,7 @@ begin
   ScrollBars := ssNone;
   Visible := False;
 
-  while Columns.Count < 5 do
+  while Columns.Count < 6 do
     Columns.Add;
   RowCount := 0 + DummyRows;
   FixedCols := 0;
@@ -210,9 +210,9 @@ end;
 
 procedure TDrivesListPopup.UpdateView;
 begin
-  Columns.Items[2].Visible := dlbShowLabel in gDrivesListButtonOptions;
-  Columns.Items[3].Visible := dlbShowFileSystem in gDrivesListButtonOptions;
-  Columns.Items[4].Visible := dlbShowFreeSpace in gDrivesListButtonOptions;
+  Columns.Items[3].Visible := dlbShowLabel in gDrivesListButtonOptions;
+  Columns.Items[4].Visible := dlbShowFileSystem in gDrivesListButtonOptions;
+  Columns.Items[5].Visible := dlbShowFreeSpace in gDrivesListButtonOptions;
 end;
 
 procedure TDrivesListPopup.Show(AtPoint: TPoint; APanel: TFilePanelSelect;
@@ -565,29 +565,43 @@ var
   I, RowNr : Integer;
   FreeSize, TotalSize: Int64;
   Drive: PDrive;
+  ShortCutChar: TUTF8Char;
 begin
   for I := 0 to FDrivesList.Count - 1 do
     begin
       Drive := FDrivesList[I];
       RowNr := LowestRow + I;
 
-      if Length(Drive^.DisplayName) > 0 then
+      //shortcuts 0-9 then a-z
+      if I < 10 then
       begin
-        Cells[1, RowNr] := Drive^.DisplayName;
-{$IFDEF FileCaseInsensitive}
-        FShortCuts[I] := UTF8Copy(UpperCase(Drive^.DisplayName), 1, 1);
-{$ELSE}
-        FShortCuts[I] := UTF8Copy(Drive^.DisplayName, 1, 1);
-{$ENDIF}
+        ShortCutChar := chr(i + 48);
+        Cells[1, RowNr] := ShortCutChar;
+        FShortCuts[I] := ShortCutChar;
+      end
+      else if I < 37 then
+      begin
+        ShortCutChar := chr(I + 87);
+        Cells[1, RowNr] := ShortCutChar;
+        FShortCuts[I] := ShortCutChar;
       end
       else
       begin
-        Cells[1, RowNr] := Drive^.Path;
         FShortCuts[I] := '';
       end;
 
-      Cells[2, RowNr] := GetDriveLabelOrStatus(Drive);
-      Cells[3, RowNr] := Drive^.FileSystem;
+      if Length(Drive^.DisplayName) > 0 then
+      begin
+        Cells[2, RowNr] := Drive^.DisplayName;
+      end
+      else
+      begin
+        Cells[2, RowNr] := Drive^.Path;
+        FShortCuts[I] := '';
+      end;
+
+      Cells[3, RowNr] := GetDriveLabelOrStatus(Drive);
+      Cells[4, RowNr] := Drive^.FileSystem;
 
       // Display free space only for some drives
       // (removable, network, etc. may be slow).
@@ -595,13 +609,13 @@ begin
          IsAvailable(Drive, False) and
          GetDiskFreeSpace(Drive^.Path, FreeSize, TotalSize) then
       begin
-        Cells[4, RowNr] :=
+        Cells[5, RowNr] :=
           Format('%s/%s', [cnvFormatFileSize(FreeSize, uoscHeader),
                            cnvFormatFileSize(TotalSize, uoscHeader)])
       end
       else if (Drive^.DriveSize > 0) then
       begin
-        Cells[4, RowNr] := cnvFormatFileSize(Drive^.DriveSize, uoscHeader);
+        Cells[5, RowNr] := cnvFormatFileSize(Drive^.DriveSize, uoscHeader);
       end
     end; // for
 end;
