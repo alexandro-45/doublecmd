@@ -1,0 +1,47 @@
+# vim:set ts=4 sw=2 ft=sh et:
+
+pkgbase=doublecmd-al45
+pkgname=('doublecmd-al45-qt5')
+pkgver=1.2.0
+pkgrel=1
+url="https://github.com/alexandro-45/doublecmd"
+arch=('x86_64')
+license=('GPL')
+provides=("$pkgbase")
+makedepends=('lazarus' 'qt5pas')
+depends=('qt5pas' 'desktop-file-utils' 'hicolor-icon-theme' 'shared-mime-info')
+opkgdesc="Twin-panel (commander-style) file manager (Qt5)"
+conflicts=('doublecmd-gtk2' 'doublecmd-qt6' 'doublecmd-qt5' 'doublecmd-qt' 'doublecmd-qt4')
+optdepends=(
+    'lua: scripting'
+    'unzip: support extracting zip archives'
+    'zip: suport packing zip archives'
+    'p7zip: support for 7zip archives'
+    'libunrar: support for rar archives'
+)
+source=("$pkgbase-$pkgver::git+$url.git#commit=8ddcba35b5d85158345e1de758319a130f16e088")
+md5sums=('SKIP')
+
+prepare() {
+    cd "$pkgbase-$pkgver"
+    sed -e 's/LIB_SUFFIX=.*/LIB_SUFFIX=/g' -i install/linux/install.sh
+    sed -e '/doublecmd.zdli/d' -i install/linux/install.sh # missing
+}
+
+build() {
+    cd "$pkgbase-$pkgver"
+    ./build.sh components
+    ./build.sh plugins
+
+    /usr/bin/lazbuild \
+        src/doublecmd.lpi \
+        --bm="NoDebug Full Optimizations" \
+        --widgetset=qt5 \
+	--cpu=$arch
+}
+
+package() {
+    cd "$pkgbase-$pkgver"
+    ./install/linux/install.sh --install-prefix="$pkgdir"
+}
+
