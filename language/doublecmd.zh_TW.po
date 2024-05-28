@@ -11523,10 +11523,6 @@ msgstr "設置自訂欄位"
 msgid "Enter new custom columns name"
 msgstr ""
 
-#: ulng.rsmenumacosservices
-msgid "Services"
-msgstr "服務"
-
 #: ulng.rsmenumacosshare
 msgid "Share..."
 msgstr "共享..."
@@ -11577,6 +11573,10 @@ msgstr "掛載"
 msgctxt "ulng.rsmnunew"
 msgid "New"
 msgstr "新增"
+
+#: ulng.rsmnunewwindow
+msgid "New Window"
+msgstr "新建視窗"
 
 #: ulng.rsmnunomedia
 msgid "No media available"

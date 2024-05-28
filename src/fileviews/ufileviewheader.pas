@@ -44,6 +44,7 @@ type
 
     procedure UpdateAddressLabel;
     procedure UpdatePathLabel;
+    procedure UpdateColor;
     procedure UpdateFont;
 
     procedure ShowPathEdit;
@@ -159,8 +160,13 @@ end;
 procedure TFileViewHeader.PathLabelDblClick(Sender: TObject);
 begin
   tmViewHistoryMenu.Enabled:=FALSE; //Cancel the possibility of a left click
-  FFileView.SetFocus;
-  frmMain.Commands.cm_DirHotList(['position=cursor']);
+
+  if gDblClickEditPath then
+    ShowPathEdit
+  else begin
+    FFileView.SetFocus;
+    frmMain.Commands.cm_DirHotList(['position=cursor']);
+  end;
 end;
 
 procedure TFileViewHeader.PathLabelMouseUp(Sender: TObject; Button: TMouseButton;
@@ -272,8 +278,7 @@ begin
   FPathLabel := TPathLabel.Create(Self, True);
   FPathLabel.Parent := Self;
 
-  PathLabelSetColor(FPathLabel);
-  PathLabelSetColor(FAddressLabel);
+  UpdateColor;
 
   // Display path below address.
   // For correct alignment, first put path at the top, then address at the top.
@@ -351,6 +356,12 @@ end;
 procedure TFileViewHeader.UpdatePathLabel;
 begin
   FPathLabel.Caption := MinimizeFilePath(FFileView.CurrentPath, FPathLabel.Canvas, FPathLabel.Width);
+end;
+
+procedure TFileViewHeader.UpdateColor;
+begin
+  PathLabelSetColor(FPathLabel);
+  PathLabelSetColor(FAddressLabel);
 end;
 
 procedure TFileViewHeader.UpdateFont;

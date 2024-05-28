@@ -474,13 +474,16 @@ begin
     else
       begin
         SizeProperty := TFileSizeProperty.Create(WcxHeader.UnpSize);
+        SizeProperty.IsValid := (WcxHeader.UnpSize >= 0);
         CompressedSizeProperty := TFileCompressedSizeProperty.Create(WcxHeader.PackSize);
       end;
     ModificationTimeProperty := TFileModificationDateTimeProperty.Create(0);
+    ModificationTimeProperty.IsValid := (WcxHeader.FileTime > 0);
+    if ModificationTimeProperty.IsValid then
     try
       ModificationTime := WcxFileTimeToDateTime(WcxHeader.FileTime);
     except
-      on EConvertError do;
+      on EConvertError do ModificationTimeProperty.IsValid := False;
     end;
 
     // Set name after assigning Attributes property, because it is used to get extension.

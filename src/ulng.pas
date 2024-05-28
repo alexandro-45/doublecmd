@@ -364,7 +364,6 @@ resourcestring
   rsMnuEdit = 'Edit';
   rsMnuOpenWith = 'Open with';
   rsMnuOpenWithOther = 'Other...';
-  rsMenuMacOsServices = 'Services';
   rsMenuMacOsShare = 'Share...';
   rsMnuMount = 'Mount';
   rsMnuUmount = 'Unmount';
@@ -380,6 +379,8 @@ resourcestring
   rsMnuCreateShortcut = 'Create Shortcut...';
   rsMnuMapNetworkDrive = 'Map Network Drive...';
   rsMnuDisconnectNetworkDrive = 'Disconnect Network Drive...';
+  // for dock emnu
+  rsMnuNewWindow = 'New Window';
   // for content plugins menu
   rsMnuContentDefault = '<Default>';
   rsMnuContentOctal = 'Octal';

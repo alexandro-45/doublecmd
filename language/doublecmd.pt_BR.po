@@ -11246,10 +11246,6 @@ msgstr "Configurar colunas personalizadas"
 msgid "Enter new custom columns name"
 msgstr "Digite nome das novas colunas personalizadas"
 
-#: ulng.rsmenumacosservices
-msgid "Services"
-msgstr ""
-
 #: ulng.rsmenumacosshare
 msgid "Share..."
 msgstr ""
@@ -11300,6 +11296,10 @@ msgstr "Montar"
 msgctxt "ulng.rsmnunew"
 msgid "New"
 msgstr "Novo"
+
+#: ulng.rsmnunewwindow
+msgid "New Window"
+msgstr ""
 
 #: ulng.rsmnunomedia
 msgid "No media available"

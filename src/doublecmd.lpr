@@ -12,10 +12,10 @@ uses
   {$ENDIF}
   {$ENDIF}
   {$IFDEF UNIX}
-  cthreads,
   {$IFNDEF HEAPTRC}
   cmem,
   {$ENDIF}
+  cthreads,
   {$IFDEF DARWIN}
   iosxwstr,
   iosxlocale,
@@ -140,6 +140,7 @@ begin
   Application.Initialize;
 
 {$IF DEFINED(DARWIN)}
+  GetMacFormatSettings(DefaultFormatSettings);
   Application.Icon:= nil;
 {$ENDIF}
 
@@ -153,6 +154,7 @@ begin
 {$ENDIF}
 
 {$IF DEFINED(darwin)}
+  FixMacFormatSettings;
   setMacOSAppearance( gAppMode );
 {$ENDIF}
 

@@ -748,6 +748,7 @@ var
   aFile: TFile = nil;
   aFiles: TFiles = nil;
   sPath, sName: String;
+  OperationsTypes: TFileSourceOperationTypes;
 begin
   with frmMain do
   begin
@@ -765,6 +766,9 @@ begin
             FreeAndNil(aFiles);
           end;
         end;
+        OperationsTypes:= Panel.FileSource.GetOperationsTypes;
+        mnuContextDelete.Visible:= fsoDelete in OperationsTypes;
+        mnuContextRenameOnly.Visible:= fsoSetFileProperty in OperationsTypes;
         AMenu.PopUp(X, Y);
       end;
       Exit;
@@ -2017,22 +2021,35 @@ var
   aFile: TFile;
   i, n: Integer;
   IsFile: Boolean;
+  sCmd: String = '';
   AMode: Integer = 0;
+  sParams: String = '';
   Param, AValue: String;
   sl: TStringList = nil;
-  ActiveFile: TFile = nil;
   AllFiles: TFiles = nil;
-  SelectedFiles: TFiles = nil;
+  sStartPath: String = '';
+  ActiveFile: TFile = nil;
   aFileSource: IFileSource;
-  sCmd: string = '';
-  sParams: string = '';
-  sStartPath: string = '';
+  ACursor: Boolean = False;
+  SelectedFiles: TFiles = nil;
   LinksResolveNeeded: Boolean;
 begin
   with frmMain do
   try
-    SelectedFiles := ActiveFrame.CloneSelectedOrActiveFiles;
     ActiveFile := ActiveFrame.CloneActiveFile;
+
+    if (Length(Params) > 0) then
+    begin
+      if GetParamValue(Params, 'cursor', AValue) then
+        GetBoolValue(AValue, ACursor);
+    end;
+
+    if not ACursor then
+      SelectedFiles := ActiveFrame.CloneSelectedOrActiveFiles
+    else begin
+      SelectedFiles:= TFiles.Create(ActiveFrame.CurrentPath);
+      if ActiveFile.IsNameValid then SelectedFiles.Add(ActiveFile.Clone);
+    end;
 
     if SelectedFiles.Count = 0 then
     begin
@@ -2116,7 +2133,7 @@ begin
       // If only one file was selected then add all files in panel to the list.
       // Works only for directly accessible files and only when using internal viewer.
       if (sl.Count = 1) and (IsFile) and
-         (not gExternalTools[etViewer].Enabled) and
+         (not ACursor) and (not gExternalTools[etViewer].Enabled) and
          ([fspDirectAccess, fspLinksToLocalFiles] * ActiveFrame.FileSource.Properties <> []) then
         begin
           AllFiles := ActiveFrame.CloneFiles;
@@ -2333,16 +2350,34 @@ end;
 
 procedure TMainCommands.cm_Edit(const Params: array of string);
 var
-  i: Integer;
+  I: Integer;
   aFile: TFile;
+  sCmd: String = '';
+  sParams: String = '';
+  Param, AValue: String;
+  sStartPath: String = '';
+  ACursor: Boolean = False;
   SelectedFiles: TFiles = nil;
-  sCmd: string = '';
-  sParams: string = '';
-  sStartPath: string = '';
 begin
   with frmMain do
   try
-    SelectedFiles := ActiveFrame.CloneSelectedOrActiveFiles;
+    if (Length(Params) > 0) then
+    begin
+      if GetParamValue(Params, 'cursor', AValue) then
+        GetBoolValue(AValue, ACursor);
+    end;
+
+    if not ACursor then
+      SelectedFiles := ActiveFrame.CloneSelectedOrActiveFiles
+    else begin
+      SelectedFiles:= TFiles.Create(ActiveFrame.CurrentPath);
+      aFile:= ActiveFrame.CloneActiveFile;
+      if aFile.IsNameValid then
+        SelectedFiles.Add(aFile)
+      else begin
+        aFile.Free;
+      end;
+    end;
 
     for I := SelectedFiles.Count - 1 downto 0 do
     begin
@@ -2379,8 +2414,7 @@ begin
     end;
 
   finally
-    if Assigned(SelectedFiles) then
-      FreeAndNil(SelectedFiles);
+    FreeAndNil(SelectedFiles);
   end;
 end;
 

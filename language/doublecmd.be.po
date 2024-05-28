@@ -10810,10 +10810,6 @@ msgstr "Наладзіць адвольныя слупкі"
 msgid "Enter new custom columns name"
 msgstr "Увесці назву новых адвольных слупкоў"
 
-#: ulng.rsmenumacosservices
-msgid "Services"
-msgstr "Службы"
-
 #: ulng.rsmenumacosshare
 msgid "Share..."
 msgstr ""
@@ -10864,6 +10860,10 @@ msgstr "Прымантаваць"
 msgctxt "ulng.rsmnunew"
 msgid "New"
 msgstr "Новы"
+
+#: ulng.rsmnunewwindow
+msgid "New Window"
+msgstr ""
 
 #: ulng.rsmnunomedia
 msgid "No media available"

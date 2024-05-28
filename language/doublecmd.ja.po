@@ -11050,10 +11050,6 @@ msgstr "カスタム列の構成"
 msgid "Enter new custom columns name"
 msgstr "新しいカスタムカラム名を入力"
 
-#: ulng.rsmenumacosservices
-msgid "Services"
-msgstr "サービス"
-
 #: ulng.rsmenumacosshare
 msgid "Share..."
 msgstr "共有..."
@@ -11104,6 +11100,10 @@ msgstr "マウント"
 msgctxt "ulng.rsmnunew"
 msgid "New"
 msgstr "新規"
+
+#: ulng.rsmnunewwindow
+msgid "New Window"
+msgstr "新しい窓"
 
 #: ulng.rsmnunomedia
 msgid "No media available"

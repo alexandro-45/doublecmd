@@ -144,8 +144,9 @@ uses
     {$ENDIF}
   {$ENDIF}
   {$IF DEFINED(DARWIN)}
+  , LCLStrConsts
   , BaseUnix, Errors, fFileProperties
-  , uQuickLook, uOpenDocThumb, uMyDarwin
+  , uQuickLook, uOpenDocThumb, uMyDarwin, uDefaultTerminal
   {$ELSEIF DEFINED(UNIX)}
   , BaseUnix, Errors, fFileProperties, uJpegThumb, uOpenDocThumb
     {$IF NOT DEFINED(HAIKU)}
@@ -805,7 +806,7 @@ begin
   ShellContextMenu.OnClose := CloseEvent;
   // Show context menu
   {$IF DEFINED(DARWIN)}
-  MacosServiceMenuHelper.PopUp( ShellContextMenu, uLng.rsMenuMacOsServices );
+  MacosServiceMenuHelper.PopUp( ShellContextMenu, rsMacOSMenuServices );
   {$ELSE}
   ShellContextMenu.PopUp(X, Y);
   {$ENDIF}
@@ -823,8 +824,15 @@ begin
     ShowVirtualDriveMenu(ADrive, X, Y, CloseEvent)
   else begin
     aFile := TFileSystemFileSource.CreateFile(EmptyStr);
-    aFile.FullPath := ADrive^.Path;
-    aFile.Attributes := faFolder;
+    if ADrive^.DriveType = dtSpecial then
+    begin
+      aFile.LinkProperty.LinkTo := ADrive^.DeviceId;
+      aFile.Attributes := FILE_ATTRIBUTE_DEVICE;
+    end
+    else begin
+      aFile.FullPath := ADrive^.Path;
+      aFile.Attributes := faFolder or FILE_ATTRIBUTE_DEVICE;
+    end;
     Files:= TFiles.Create(EmptyStr); // free in ShowContextMenu
     Files.Add(aFile);
     ShowContextMenu(Parent, Files, X, Y, False, CloseEvent);

@@ -10775,10 +10775,6 @@ msgstr ""
 msgid "Enter new custom columns name"
 msgstr ""
 
-#: ulng.rsmenumacosservices
-msgid "Services"
-msgstr ""
-
 #: ulng.rsmenumacosshare
 msgid "Share..."
 msgstr ""
@@ -10828,6 +10824,10 @@ msgstr ""
 #: ulng.rsmnunew
 msgctxt "ulng.rsmnunew"
 msgid "New"
+msgstr ""
+
+#: ulng.rsmnunewwindow
+msgid "New Window"
 msgstr ""
 
 #: ulng.rsmnunomedia

@@ -10,6 +10,7 @@ var
   gpLngDir : String = '';  // path to language *.po files
   gpPixmapPath : String = '';  // path to pixmaps
   gpHighPath : String = ''; // editor highlighter directory
+  gpCacheDir : String = ''; // cache directory
   gpThumbCacheDir : String = ''; // thumbnails cache directory
 
 //Global Configuration Filename
@@ -34,9 +35,9 @@ end;
 
 procedure UpdateEnvironmentVariable;
 begin
-  mbSetEnvironmentVariable('COMMANDER_INI_PATH', gpCfgDir);
   mbSetEnvironmentVariable('COMMANDER_INI', gpCfgDir + 'doublecmd.xml');
   mbSetEnvironmentVariable('DC_CONFIG_PATH', ExcludeTrailingPathDelimiter(gpCfgDir));
+  mbSetEnvironmentVariable('COMMANDER_INI_PATH', ExcludeTrailingPathDelimiter(gpCfgDir));
 end;
 
 procedure LoadPaths;
@@ -60,6 +61,11 @@ begin
       gpCfgDir := gpGlobalCfgDir;
     end;
   end;
+  if gpCfgDir <> gpGlobalCfgDir then
+    gpCacheDir := GetAppCacheDir
+  else begin
+    gpCacheDir := gpExePath + 'cache';
+  end;
   DCDebug('Executable directory: ', gpExePath);
   DCDebug('Configuration directory: ', gpCfgDir);
   DCDebug('Global configuration directory: ', gpGlobalCfgDir);
@@ -68,7 +74,7 @@ begin
   gpLngDir := gpExePath + 'language' + DirectorySeparator;
   gpPixmapPath := gpExePath + 'pixmaps' + DirectorySeparator;
   gpHighPath:= gpExePath + 'highlighters' + DirectorySeparator;
-  gpThumbCacheDir := GetAppCacheDir + PathDelim + 'thumbnails';
+  gpThumbCacheDir := gpCacheDir + PathDelim + 'thumbnails';
 
   // set up environment variables
   UpdateEnvironmentVariable;

@@ -11116,10 +11116,6 @@ msgstr "Configurează coloane personalizate"
 msgid "Enter new custom columns name"
 msgstr ""
 
-#: ulng.rsmenumacosservices
-msgid "Services"
-msgstr ""
-
 #: ulng.rsmenumacosshare
 msgid "Share..."
 msgstr ""
@@ -11170,6 +11166,10 @@ msgstr "Montează"
 msgctxt "ulng.rsmnunew"
 msgid "New"
 msgstr "Nou"
+
+#: ulng.rsmnunewwindow
+msgid "New Window"
+msgstr ""
 
 #: ulng.rsmnunomedia
 msgid "No media available"
